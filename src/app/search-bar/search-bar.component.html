@@ -1,3 +1,8 @@
 <input type="text" class="form-control" placeholder="Enter location and press enter..." #locationValue
   (keyup.enter)="onEnter(locationValue.value)">
 <p>{{value}}</p>
+
+<div *ngIf="locationSearch">
+  <app-view [location]="locationSearch"></app-view>
+
+</div>
