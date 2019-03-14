@@ -40,13 +40,23 @@ export class ViewComponent implements OnChanges {
         return this.weatherService.getWeatherInfo(coord)
       })
     ).subscribe(data => {
+      console.log(data);
       this.currData["time"] = this.convertEpochToHumantime(data['currently']['time']);
       this.currData['summary'] = data['currently']['summary'];
+      this.currData['location'] = data['timezone'].replace("/", "-")
       let x = [];
       data['daily']['data'].forEach(el => {
-        x.push({ time: this.convertEpochToHumantime(el['time']), summary: el['summary'] });
+        x.push({ 
+          date: this.convertEpochToHumantime(el['time']), 
+          summary: el['summary'],
+          icon : el['icon'],
+          low : el['temperatureLow'],
+          high : el['temperatureHigh'],
+          sunrise : this.convertEpochToHumantime(el['sunriseTime']),
+          sunset : this.convertEpochToHumantime(el['sunsetTime'])
+        });
       });
-      this.currData['view'] = x
+      this.currData['view'] = x;
     });
   }
 

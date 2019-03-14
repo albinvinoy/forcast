@@ -3,7 +3,6 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { map, tap, catchError } from "rxjs/operators/"
 import { throwError, of, Observable } from 'rxjs';
 
-
 @Injectable({
   providedIn: 'root'
 })
@@ -30,8 +29,8 @@ export class WeatherService {
     // this.http.get(this._coordinateQuery, {
     //   headers : headers
     // }).subscribe((response) => console.log(response));
-
-    return this.http.get(this.weather_api.replace("*", coordinates[0]).replace("#",coordinates[1]), {headers : headers}).pipe(
+//this.weather_api.replace("*", coordinates[0]).replace("#",coordinates[1]
+    return this.http.get(this.localData).pipe(
       tap(_ => console.log('got data')),
       catchError(err => throwError('Error : ' +  err))
     );
