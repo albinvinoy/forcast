@@ -6,6 +6,7 @@ import { Observable, of, pipe } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
+
 export class CoordinateService {
 
   readonly coord_API = "https://api.opencagedata.com/geocode/v1/json?q=*&key=dcd02e4f235d46eb947f821717bc8f5f"
