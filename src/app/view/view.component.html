@@ -1,14 +1,18 @@
-<p>
-  CurrentTime : {{ currData.time | date }}
-  Summary : {{ currData.summary }}
-</p>
-<div class="card-deck">
-  <div class="card text-white bg-dark" style="max-width: 18rem;" *ngFor="let day of  currData.view">
-      <img class="card-img-top" src=".../100px200/" alt="Card image cap">
-    <div class="card-header"><span>Date : </span> {{ day.time | date }}</div>
-    <div class="card-body">
+<div class="container">
+
+  
+  <p>
+    CurrentTime : {{ currData.time | date }}
+    Summary : {{ currData.summary }}
+  </p>
+
+    <div class="card text-white bg-dark" style="max-width: 100%;" *ngFor="let day of  currData.view">
+        <img class="card-img-top" src=".../100px200/" alt="Card image cap">
+        <div class="card-header"><span>Date : </span> {{ day.time | date }}</div>
+        <div class="card-body">
       <h5 class="card-title">Dark card title</h5>
       <p class="card-text">{{ day.summary }}</p>
     </div>
   </div>
+
 </div>

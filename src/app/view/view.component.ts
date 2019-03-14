@@ -1,7 +1,8 @@
 import { Component, OnInit, Input, SimpleChanges, OnChanges } from '@angular/core';
 import { WeatherService } from '../weather.service'
-import { map } from 'rxjs/operators';
-
+import { map, switchMap } from 'rxjs/operators';
+import { CoordinateService } from '../coordinate.service';
+import { Observable, of, pipe } from 'rxjs';
 
 @Component({
   selector: 'app-view',
@@ -11,26 +12,34 @@ import { map } from 'rxjs/operators';
 
 export class ViewComponent implements OnChanges {
   alerts: any;
-  currData:any = {};
-
+  currData: any = {};
 
   @Input() location: string;
 
+  coordinate = [];
 
-
-  coordinate = [37.8267, -122.4233];
-
-  constructor(public weatherService: WeatherService) { }
+  constructor(public weatherService: WeatherService, public coordService: CoordinateService) { }
 
   ngOnChanges(changes: SimpleChanges) {
-
-    console.log(changes);
-    this.printData(this.coordinate);
+    this.weatherData();
     console.log(this.currData);
   }
 
-  printData(coord: Array<number>) {
-    this.weatherService.getWeatherInfo(coord).subscribe((data) => {
+  weatherData() {
+    this.coordService.getCoordinates(this.location).pipe(
+      switchMap(coordata => {
+        let coord = null;
+        if (coordata['status']['code'] == 200 && coordata['results'].length != 0) {
+          let lat = coordata['results'][0]['geometry']['lat'];
+          let lng = coordata['results'][0]['geometry']['lng'];
+          coord = [lat, lng];
+        }
+        else{
+          coord = [];
+        }
+        return this.weatherService.getWeatherInfo(coord)
+      })
+    ).subscribe(data => {
       this.currData["time"] = this.convertEpochToHumantime(data['currently']['time']);
       this.currData['summary'] = data['currently']['summary'];
       let x = [];
@@ -38,12 +47,10 @@ export class ViewComponent implements OnChanges {
         x.push({ time: this.convertEpochToHumantime(el['time']), summary: el['summary'] });
       });
       this.currData['view'] = x
-      console.log(this.currData);
     });
-
   }
 
   convertEpochToHumantime(epoch: any): Date {
-    return new Date(epoch *1000);
+    return new Date(epoch * 1000);
   }
 }

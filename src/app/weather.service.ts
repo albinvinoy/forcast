@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { map, tap, catchError } from "rxjs/operators/"
-import { throwError } from 'rxjs';
+import { throwError, of, Observable } from 'rxjs';
 
 
 @Injectable({
@@ -27,7 +27,7 @@ export class WeatherService {
   	  	this._coordinateQuery = this.weather_api.replace("*", String(coordinates[0])).replace("#", String(coordinates[1]));
   }
 
-  getWeatherInfo(coordinates : Array<number>, type="daily") {
+  getWeatherInfo(coordinates : any, type="daily") {
     // this._stringQuery(coordinates);
 
     // let headers = new HttpHeaders({
@@ -39,20 +39,16 @@ export class WeatherService {
     //   headers : headers
     // }).subscribe((response) => console.log(response));
 
-    console.log(type);
-    // return this.http.get(this.localData).map(resp => resp.json());
+    console.log(coordinates);
     return this.http.get(this.localData).pipe(
       tap(_ => console.log('got data')),
       catchError(err => throwError('Error : ' +  err))
     );
-
-    // this.http.get(this.localData).subscribe((resp) => this.content = resp);
   }
 
 
-
-
-
-
+  value(a : any){
+    return of(a);
+  }
 
 }
